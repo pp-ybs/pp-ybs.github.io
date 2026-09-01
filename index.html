@@ -177,6 +177,21 @@
       }
       .copy svg { width: 17px; height: 17px; }
       .copy-all-wrap { padding: 16px 24px; background: var(--soft); }
+      .reference-help {
+        padding: 16px 24px;
+        border-top: 1px solid var(--line);
+        background: #fbf6f3;
+      }
+      .reference-label {
+        margin: 0 0 5px;
+        color: var(--brand);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .reference-format { margin: 0; color: var(--navy); font-size: 15px; font-weight: 800; line-height: 1.45; }
+      .reference-examples { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
       .copy-all {
         width: 100%;
         min-height: 48px;
@@ -199,7 +214,7 @@
         .jump { gap: 6px; }
         .jump button { padding: 7px 4px; font-size: 12px; }
         .bank { border-radius: 22px; }
-        .bank-head, dl, .copy-all-wrap { padding-left: 16px; padding-right: 16px; }
+        .bank-head, dl, .reference-help, .copy-all-wrap { padding-left: 16px; padding-right: 16px; }
         .selected { display: none !important; }
         .logo-name { font-size: 17px; }
         .rak .logo-name { font-size: 24px; }
@@ -225,7 +240,7 @@
         <div>
           <h2>Before you transfer</h2>
           <ol>
-            <li><strong>1.</strong> Use your name + session type as the transfer reference.</li>
+            <li><strong>1.</strong> Use your name + session type, product, or gift card as the transfer reference.</li>
             <li><strong>2.</strong> Send the transaction number to your photographer after payment.</li>
           </ol>
         </div>
@@ -254,6 +269,11 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1015873324801">1015873324801</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE530260001015873324801">AE530260001015873324801</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
+          <div class="reference-help">
+            <p class="reference-label">Transfer reference</p>
+            <p class="reference-format">Your Name - What you are paying for</p>
+            <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
+          </div>
           <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
         </article>
 
@@ -270,6 +290,11 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="0122897094001">0122897094001</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE140400000122897094001">AE140400000122897094001</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
+          <div class="reference-help">
+            <p class="reference-label">Transfer reference</p>
+            <p class="reference-format">Your Name - What you are paying for</p>
+            <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
+          </div>
           <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
         </article>
 
@@ -286,6 +311,11 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1001327201479001">1001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE680351001327201479001">AE680351001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
+          <div class="reference-help">
+            <p class="reference-label">Transfer reference</p>
+            <p class="reference-format">Your Name - What you are paying for</p>
+            <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
+          </div>
           <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
         </article>
       </section>
@@ -344,7 +374,7 @@
         button.addEventListener('click', async () => {
           const bank = button.closest('.bank');
           const values = [...bank.querySelectorAll('[data-value]')].map(el => el.dataset.value);
-          const details = `${bank.dataset.name}\nAccount Name: ${values[0]}\nAccount Number: ${values[1]}\nIBAN: ${values[2]}\nReference: Your Name + Session Type`;
+          const details = `${bank.dataset.name}\nAccount Name: ${values[0]}\nAccount Number: ${values[1]}\nIBAN: ${values[2]}\nReference: Your Name - Session Type / Product / Gift Card`;
           await writeText(details);
           showCopied(button, true);
         });
