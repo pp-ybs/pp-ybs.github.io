@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a2540" />
+    <title>Bank Transfer Details | You Baby Studio</title>
+    <meta
+      name="description"
+      content="Copy the correct You Baby Studio bank account details and review the transfer instructions."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #0a2540;
+        --ink: #14212e;
+        --muted: #65717d;
+        --line: #dce2e8;
+        --paper: #ffffff;
+        --canvas: #f6f8fa;
+        --brand: #a85f51;
+        --soft: #f0f3f6;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button { font: inherit; -webkit-tap-highlight-color: transparent; }
+
+      .page {
+        width: min(100% - 32px, 760px);
+        margin: 0 auto;
+        padding: 40px 0 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--brand);
+        font-size: 12px;
+        font-weight: 850;
+        letter-spacing: .24em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--navy);
+        font-size: clamp(34px, 7vw, 50px);
+        line-height: 1.02;
+        letter-spacing: -.045em;
+      }
+
+      .intro {
+        max-width: 650px;
+        margin: 14px 0 26px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .notice {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 16px;
+        margin-bottom: 28px;
+        padding: 30px 32px;
+        border-radius: 26px;
+        background: var(--navy);
+        color: #fff;
+        box-shadow: 0 16px 42px rgb(10 37 64 / 16%);
+      }
+
+      .notice svg { width: 36px; height: 36px; }
+      .notice h2 { margin: 0; font-size: 24px; letter-spacing: -.02em; }
+      .notice ol { margin: 15px 0 0; padding: 0; list-style: none; }
+      .notice li { margin-top: 10px; color: rgb(255 255 255 / 86%); font-size: 18px; line-height: 1.55; }
+      .notice strong { color: #fff; }
+
+      .jump {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 9px;
+        margin: 0 0 26px;
+      }
+
+      .jump button,
+      .copy {
+        min-height: 44px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: #fff;
+        color: var(--navy);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 750;
+        transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      }
+
+      .jump button:hover,
+      .copy:hover { border-color: #aebbc7; background: #fafdff; }
+      button:active { transform: translateY(1px); }
+      button:focus-visible { outline: 3px solid rgb(10 37 64 / 25%); outline-offset: 2px; }
+      .jump button.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+
+      .accounts { display: grid; gap: 20px; }
+
+      .bank {
+        scroll-margin-top: 20px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-left: 7px solid var(--accent);
+        border-radius: 26px;
+        background: var(--paper);
+        box-shadow: 0 14px 44px rgb(10 37 64 / 7%);
+        transition: box-shadow .2s ease;
+      }
+
+      .bank.active { box-shadow: 0 0 0 3px rgb(10 37 64 / 18%), 0 14px 44px rgb(10 37 64 / 9%); }
+
+      .bank-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .logo { display: flex; align-items: center; gap: 10px; color: var(--accent); }
+      .logo svg { flex: 0 0 auto; }
+      .logo-name { font-size: 20px; font-weight: 800; letter-spacing: -.03em; }
+      .rak .logo-name { font-size: 29px; font-weight: 900; letter-spacing: -.07em; text-transform: lowercase; }
+      .fab .logo-name { font-size: 35px; font-weight: 950; letter-spacing: -.09em; }
+      .selected {
+        display: none;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: rgb(10 37 64 / 8%);
+        color: var(--navy);
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      .bank.active .selected { display: block; }
+
+      dl { margin: 0; padding: 0 24px; }
+      .field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 14px;
+        padding: 17px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .field:last-child { border-bottom: 0; }
+      dt { margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+      dd { margin: 0; overflow-wrap: anywhere; font-size: 16px; font-weight: 760; line-height: 1.35; }
+      dd.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-weight: 600; letter-spacing: -.035em; }
+
+      .copy {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-width: 92px;
+        padding: 0 13px;
+      }
+      .copy svg { width: 17px; height: 17px; }
+      .copy-all-wrap { padding: 16px 24px; background: var(--soft); }
+      .copy-all {
+        width: 100%;
+        min-height: 48px;
+        border-color: var(--navy);
+        background: var(--navy);
+        color: #fff;
+      }
+      .copy-all:hover { background: #123552; color: #fff; }
+
+      footer { padding: 28px 0 4px; color: var(--muted); text-align: center; font-size: 12px; }
+      .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+      @media (max-width: 560px) {
+        .page { width: min(100% - 24px, 760px); padding-top: 28px; }
+        .intro { font-size: 15px; }
+        .notice { grid-template-columns: 30px 1fr; gap: 12px; padding: 24px 20px; border-radius: 22px; }
+        .notice svg { width: 30px; height: 30px; }
+        .notice h2 { font-size: 21px; }
+        .notice li { font-size: 16px; }
+        .jump { gap: 6px; }
+        .jump button { padding: 7px 4px; font-size: 12px; }
+        .bank { border-radius: 22px; }
+        .bank-head, dl, .copy-all-wrap { padding-left: 16px; padding-right: 16px; }
+        .selected { display: none !important; }
+        .logo-name { font-size: 17px; }
+        .rak .logo-name { font-size: 24px; }
+        .field { gap: 9px; }
+        dd { font-size: 14px; }
+        .copy { min-width: 76px; padding: 0 10px; font-size: 13px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="eyebrow">You Baby Studio</p>
+        <h1>Bank transfer details</h1>
+        <p class="intro">Choose your bank and tap Copy. Please double-check the selected bank before transferring.</p>
+      </header>
+
+      <aside class="notice">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z" />
+          <path d="m8.8 12 2.1 2.1 4.5-4.6" />
+        </svg>
+        <div>
+          <h2>Before you transfer</h2>
+          <ol>
+            <li><strong>1.</strong> Use your name + session type as the transfer reference.</li>
+            <li><strong>2.</strong> Send the transaction number to your photographer after payment.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <nav class="jump" aria-label="Jump to a bank">
+        <button type="button" data-bank="enbd">Emirates NBD</button>
+        <button type="button" data-bank="rakbank">RAKBANK</button>
+        <button type="button" data-bank="fab">FAB</button>
+      </nav>
+
+      <section class="accounts" aria-label="Bank accounts">
+        <article class="bank" id="enbd" style="--accent:#072447" data-name="Emirates NBD">
+          <div class="bank-head">
+            <div class="logo enbd" aria-label="Emirates NBD">
+              <svg width="36" height="42" viewBox="0 0 42 46" fill="none" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="39" height="43" stroke="currentColor" stroke-width="3" />
+                <path d="M30 4C15 17 12 29 20 42M34 6C25 18 25 29 29 39" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+              </svg>
+              <span class="logo-name">Emirates NBD</span>
+            </div>
+            <span class="selected">Selected</span>
+          </div>
+          <dl>
+            <div class="field"><div><dt>Account name</dt><dd data-value="YOU BABY STUDIO SOLE PROPRIETORSHIP LLC">YOU BABY STUDIO SOLE PROPRIETORSHIP LLC</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1015873324801">1015873324801</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE530260001015873324801">AE530260001015873324801</dd></div><button class="copy" type="button">Copy</button></div>
+          </dl>
+          <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
+        </article>
+
+        <article class="bank rak" id="rakbank" style="--accent:#ff3b00" data-name="RAKBANK">
+          <div class="bank-head">
+            <div class="logo" aria-label="RAKBANK">
+              <svg width="44" height="39" viewBox="0 0 52 46" fill="currentColor" aria-hidden="true"><path d="M0 0h22c17 0 30 13 30 30H29L0 17Z"/><path d="M0 30h29L15 46H0Z"/></svg>
+              <span class="logo-name">rakbank</span>
+            </div>
+            <span class="selected">Selected</span>
+          </div>
+          <dl>
+            <div class="field"><div><dt>Account name</dt><dd data-value="YOU BABY STUDIO">YOU BABY STUDIO</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="0122897094001">0122897094001</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE140400000122897094001">AE140400000122897094001</dd></div><button class="copy" type="button">Copy</button></div>
+          </dl>
+          <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
+        </article>
+
+        <article class="bank fab" id="fab" style="--accent:#0754a4" data-name="First Abu Dhabi Bank (FAB)">
+          <div class="bank-head">
+            <div class="logo" aria-label="First Abu Dhabi Bank">
+              <span class="logo-name">FAB</span>
+              <svg width="24" height="39" viewBox="0 0 30 50" fill="#ef2b2d" aria-hidden="true"><path d="M0 7 30 0 7 50Z"/></svg>
+            </div>
+            <span class="selected">Selected</span>
+          </div>
+          <dl>
+            <div class="field"><div><dt>Account name</dt><dd data-value="YOU BABY STUDIO">YOU BABY STUDIO</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1001327201479001">1001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE680351001327201479001">AE680351001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
+          </dl>
+          <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
+        </article>
+      </section>
+
+      <p class="sr-only" aria-live="polite" id="status"></p>
+      <footer>You Baby Studio &bull; Secure bank transfer information</footer>
+    </main>
+
+    <script>
+      const banks = [...document.querySelectorAll('.bank')];
+      const jumpButtons = [...document.querySelectorAll('[data-bank]')];
+      const copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></svg>';
+      const checkIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m5 12 4 4 10-10"/></svg>';
+
+      async function writeText(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch (_) {
+          const area = document.createElement('textarea');
+          area.value = value;
+          area.style.cssText = 'position:fixed;opacity:0';
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand('copy');
+          area.remove();
+        }
+      }
+
+      function showCopied(button, all) {
+        const original = button.innerHTML;
+        button.innerHTML = checkIcon + (all ? 'All details copied' : 'Copied');
+        document.getElementById('status').textContent = 'Copied successfully';
+        window.setTimeout(() => { button.innerHTML = original; }, 2200);
+      }
+
+      function selectBank(id, scroll) {
+        banks.forEach(bank => bank.classList.toggle('active', bank.id === id));
+        jumpButtons.forEach(button => button.classList.toggle('active', button.dataset.bank === id));
+        history.replaceState(null, '', '#' + id);
+        if (scroll) document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      jumpButtons.forEach(button => button.addEventListener('click', () => selectBank(button.dataset.bank, true)));
+
+      document.querySelectorAll('.field .copy').forEach(button => {
+        button.innerHTML = copyIcon + 'Copy';
+        button.addEventListener('click', async () => {
+          const value = button.closest('.field').querySelector('[data-value]').dataset.value;
+          await writeText(value);
+          showCopied(button, false);
+        });
+      });
+
+      document.querySelectorAll('.copy-all').forEach(button => {
+        button.innerHTML = copyIcon + 'Copy all account details';
+        button.addEventListener('click', async () => {
+          const bank = button.closest('.bank');
+          const values = [...bank.querySelectorAll('[data-value]')].map(el => el.dataset.value);
+          const details = `${bank.dataset.name}\nAccount Name: ${values[0]}\nAccount Number: ${values[1]}\nIBAN: ${values[2]}\nReference: Your Name + Session Type`;
+          await writeText(details);
+          showCopied(button, true);
+        });
+      });
+
+      const initial = location.hash.slice(1);
+      if (banks.some(bank => bank.id === initial)) {
+        selectBank(initial, false);
+        window.setTimeout(() => document.getElementById(initial).scrollIntoView({ block: 'center' }), 120);
+      }
+    </script>
+  </body>
+</html>
