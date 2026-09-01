@@ -112,6 +112,28 @@
       }
       .step-title { display: block; margin: 0 0 3px; color: #fff; font-size: 17px; font-weight: 850; line-height: 1.35; }
       .step-copy { display: block; color: rgb(255 255 255 / 76%); font-size: 14px; line-height: 1.55; }
+      .matching-bank-tip {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 13px;
+        align-items: start;
+        margin-top: 14px;
+        padding: 15px;
+        border: 1px solid rgb(255 255 255 / 24%);
+        border-radius: 18px;
+        background: #fff;
+        color: var(--navy);
+      }
+      .matching-bank-tip svg {
+        width: 42px;
+        height: 42px;
+        padding: 9px;
+        border-radius: 13px;
+        background: var(--soft);
+        color: var(--brand);
+      }
+      .matching-bank-tip strong { display: block; margin-bottom: 3px; font-size: 16px; line-height: 1.35; }
+      .matching-bank-tip span { display: block; color: var(--muted); font-size: 13px; line-height: 1.55; }
 
       @keyframes step-in {
         from { opacity: 0; transform: translateY(12px); }
@@ -219,20 +241,40 @@
       .copy svg { width: 17px; height: 17px; }
       .copy-all-wrap { padding: 16px 24px; background: var(--soft); }
       .reference-help {
-        padding: 16px 24px;
-        border-top: 1px solid var(--line);
-        background: #fbf6f3;
+        margin: 0 18px 18px;
+        padding: 17px 18px;
+        border: 2px solid #dfb1a6;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #fff9f7, #f7ebe7);
+        box-shadow: 0 8px 22px rgb(168 95 81 / 10%);
+      }
+      .reference-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
       }
       .reference-label {
-        margin: 0 0 5px;
+        margin: 0;
         color: var(--brand);
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 850;
-        letter-spacing: .13em;
+        letter-spacing: .09em;
         text-transform: uppercase;
       }
-      .reference-format { margin: 0; color: var(--navy); font-size: 15px; font-weight: 800; line-height: 1.45; }
-      .reference-examples { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+      .reference-required {
+        flex: 0 0 auto;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+      .reference-format { margin: 9px 0 0; color: var(--navy); font-size: 17px; font-weight: 850; line-height: 1.4; }
+      .reference-examples { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
       .copy-all {
         width: 100%;
         min-height: 48px;
@@ -256,10 +298,16 @@
         .step-number { width: 36px; height: 36px; font-size: 16px; }
         .step-title { font-size: 15px; }
         .step-copy { font-size: 13px; }
+        .matching-bank-tip { grid-template-columns: 36px 1fr; gap: 11px; padding: 13px; }
+        .matching-bank-tip svg { width: 36px; height: 36px; padding: 8px; }
+        .matching-bank-tip strong { font-size: 15px; }
         .jump { gap: 6px; }
         .jump button { padding: 7px 4px; font-size: 12px; }
         .bank { border-radius: 22px; }
-        .bank-head, dl, .reference-help, .copy-all-wrap { padding-left: 16px; padding-right: 16px; }
+        .bank-head, dl, .copy-all-wrap { padding-left: 16px; padding-right: 16px; }
+        .reference-help { margin: 0 12px 12px; padding: 15px 14px; }
+        .reference-label { font-size: 10px; }
+        .reference-format { font-size: 15px; }
         .selected { display: none !important; }
         .logo-name { font-size: 17px; }
         .rak .logo-name { font-size: 24px; }
@@ -291,7 +339,7 @@
         <ol class="steps">
           <li class="step" style="--delay:80ms">
             <span class="step-number">1</span>
-            <span><strong class="step-title">Choose a bank and make the transfer</strong><span class="step-copy">Copy the correct account details below and double-check the selected bank.</span></span>
+            <span><strong class="step-title">Choose a bank and make the transfer</strong><span class="step-copy">When possible, choose the same bank you are sending from, then copy and double-check the account details.</span></span>
           </li>
           <li class="step" style="--delay:180ms">
             <span class="step-number">2</span>
@@ -302,6 +350,12 @@
             <span><strong class="step-title">Send proof to our team</strong><span class="step-copy">Send a screenshot or transfer receipt, the transaction/reference number, and the bank you sent the payment to.</span></span>
           </li>
         </ol>
+        <div class="matching-bank-tip" role="note">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18M12 3 3 7v3h18V7l-9-4Z" />
+          </svg>
+          <span><strong>Best option: use the matching bank</strong><span>Sending from FAB? Choose FAB below. Sending from Emirates NBD or RAKBANK? Choose the matching account. A same-bank transfer may arrive faster and may reduce bank charges.</span></span>
+        </div>
       </aside>
 
       <nav class="jump" aria-label="Jump to a bank">
@@ -327,8 +381,8 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1015873324801">1015873324801</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE530260001015873324801">AE530260001015873324801</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
-          <div class="reference-help">
-            <p class="reference-label">Transfer reference</p>
+          <div class="reference-help" role="note">
+            <div class="reference-title-row"><p class="reference-label">Reference to enter in your banking app</p><span class="reference-required">Important</span></div>
             <p class="reference-format">Your Name - What you are paying for</p>
             <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
           </div>
@@ -348,8 +402,8 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="0122897094001">0122897094001</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE140400000122897094001">AE140400000122897094001</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
-          <div class="reference-help">
-            <p class="reference-label">Transfer reference</p>
+          <div class="reference-help" role="note">
+            <div class="reference-title-row"><p class="reference-label">Reference to enter in your banking app</p><span class="reference-required">Important</span></div>
             <p class="reference-format">Your Name - What you are paying for</p>
             <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
           </div>
@@ -369,8 +423,8 @@
             <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="1001327201479001">1001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
             <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="AE680351001327201479001">AE680351001327201479001</dd></div><button class="copy" type="button">Copy</button></div>
           </dl>
-          <div class="reference-help">
-            <p class="reference-label">Transfer reference</p>
+          <div class="reference-help" role="note">
+            <div class="reference-title-row"><p class="reference-label">Reference to enter in your banking app</p><span class="reference-required">Important</span></div>
             <p class="reference-format">Your Name - What you are paying for</p>
             <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
           </div>
