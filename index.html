@@ -24,6 +24,8 @@
 
       * { box-sizing: border-box; }
 
+      [hidden] { display: none !important; }
+
       html { scroll-behavior: smooth; }
 
       body {
@@ -66,6 +68,37 @@
         font-size: 16px;
         line-height: 1.55;
       }
+
+      .country-picker {
+        margin: 0 0 26px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 12px 34px rgb(10 37 64 / 7%);
+      }
+      .country-picker h2 { margin: 0; color: var(--navy); font-size: 20px; letter-spacing: -.02em; }
+      .country-picker p { margin: 5px 0 16px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+      .country-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .country-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 58px;
+        padding: 10px 14px;
+        border: 2px solid var(--line);
+        border-radius: 16px;
+        background: #fff;
+        color: var(--navy);
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 850;
+        transition: border-color .15s ease, background .15s ease, transform .15s ease;
+      }
+      .country-button:hover { border-color: #aebbc7; background: #fafdff; }
+      .country-button.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+      .country-flag { font-size: 25px; line-height: 1; }
 
       .notice {
         margin-bottom: 28px;
@@ -203,6 +236,7 @@
       .logo-name { font-size: 20px; font-weight: 800; letter-spacing: -.03em; }
       .rak .logo-name { font-size: 29px; font-weight: 900; letter-spacing: -.07em; text-transform: lowercase; }
       .fab .logo-name { font-size: 35px; font-weight: 950; letter-spacing: -.09em; }
+      .cbq-logo { display: block; width: min(230px, 68vw); height: auto; }
       .selected {
         display: none;
         padding: 5px 9px;
@@ -290,6 +324,10 @@
       @media (max-width: 560px) {
         .page { width: min(100% - 24px, 760px); padding-top: 28px; }
         .intro { font-size: 15px; }
+        .country-picker { padding: 18px; border-radius: 19px; }
+        .country-picker h2 { font-size: 18px; }
+        .country-button { min-height: 54px; padding: 9px 8px; font-size: 14px; }
+        .country-flag { font-size: 22px; }
         .notice { padding: 24px 20px; border-radius: 22px; }
         .notice-heading { gap: 12px; }
         .notice-heading svg { width: 30px; height: 30px; }
@@ -322,10 +360,19 @@
       <header>
         <p class="eyebrow">You Baby Studio</p>
         <h1>Bank transfer details</h1>
-        <p class="intro">Choose your bank and tap Copy. Please double-check the selected bank before transferring.</p>
+        <p class="intro">First choose where you are sending from. We will show only the correct bank account details.</p>
       </header>
 
-      <aside class="notice">
+      <section class="country-picker" aria-labelledby="country-heading">
+        <h2 id="country-heading">Where are you sending from?</h2>
+        <p>Choose a country before making the transfer.</p>
+        <div class="country-options" role="group" aria-label="Choose your country">
+          <button class="country-button" type="button" data-country="uae" aria-pressed="false"><span class="country-flag" aria-hidden="true">🇦🇪</span> UAE</button>
+          <button class="country-button" type="button" data-country="qatar" aria-pressed="false"><span class="country-flag" aria-hidden="true">🇶🇦</span> Qatar</button>
+        </div>
+      </section>
+
+      <aside class="notice" id="transfer-guide" hidden>
         <div class="notice-heading">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z" />
@@ -339,7 +386,7 @@
         <ol class="steps">
           <li class="step" style="--delay:80ms">
             <span class="step-number">1</span>
-            <span><strong class="step-title">Choose a bank and make the transfer</strong><span class="step-copy">When possible, choose the same bank you are sending from, then copy and double-check the account details.</span></span>
+            <span><strong class="step-title">Choose a bank and make the transfer</strong><span class="step-copy" id="step-one-copy">Copy and double-check the account details below.</span></span>
           </li>
           <li class="step" style="--delay:180ms">
             <span class="step-number">2</span>
@@ -350,22 +397,28 @@
             <span><strong class="step-title">Send proof to our team</strong><span class="step-copy">Send a screenshot or transfer receipt, the transaction/reference number, and the bank you sent the payment to.</span></span>
           </li>
         </ol>
-        <div class="matching-bank-tip" role="note">
+        <div class="matching-bank-tip" role="note" data-country-tip="uae">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
             <path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18M12 3 3 7v3h18V7l-9-4Z" />
           </svg>
           <span><strong>Best option: use the matching bank</strong><span>Sending from FAB? Choose FAB below. Sending from Emirates NBD or RAKBANK? Choose the matching account. A same-bank transfer may arrive faster and may reduce bank charges.</span></span>
         </div>
+        <div class="matching-bank-tip" role="note" data-country-tip="qatar" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18M12 3 3 7v3h18V7l-9-4Z" />
+          </svg>
+          <span><strong>Best option: use the matching bank</strong><span>If you are sending from Commercial Bank, use the Commercial Bank account below. A same-bank transfer may arrive faster and may reduce bank charges.</span></span>
+        </div>
       </aside>
 
-      <nav class="jump" aria-label="Jump to a bank">
+      <nav class="jump" id="uae-bank-nav" aria-label="Jump to a UAE bank" hidden>
         <button type="button" data-bank="enbd">Emirates NBD</button>
         <button type="button" data-bank="rakbank">RAKBANK</button>
         <button type="button" data-bank="fab">FAB</button>
       </nav>
 
-      <section class="accounts" aria-label="Bank accounts">
-        <article class="bank" id="enbd" style="--accent:#072447" data-name="Emirates NBD">
+      <section class="accounts" aria-label="UAE bank accounts" data-country-panel="uae" hidden>
+        <article class="bank" id="enbd" style="--accent:#072447" data-name="Emirates NBD" data-bank-country="uae">
           <div class="bank-head">
             <div class="logo enbd" aria-label="Emirates NBD">
               <svg width="36" height="42" viewBox="0 0 42 46" fill="none" aria-hidden="true">
@@ -389,7 +442,7 @@
           <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
         </article>
 
-        <article class="bank rak" id="rakbank" style="--accent:#ff3b00" data-name="RAKBANK">
+        <article class="bank rak" id="rakbank" style="--accent:#ff3b00" data-name="RAKBANK" data-bank-country="uae">
           <div class="bank-head">
             <div class="logo" aria-label="RAKBANK">
               <svg width="44" height="39" viewBox="0 0 52 46" fill="currentColor" aria-hidden="true"><path d="M0 0h22c17 0 30 13 30 30H29L0 17Z"/><path d="M0 30h29L15 46H0Z"/></svg>
@@ -410,7 +463,7 @@
           <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
         </article>
 
-        <article class="bank fab" id="fab" style="--accent:#0754a4" data-name="First Abu Dhabi Bank (FAB)">
+        <article class="bank fab" id="fab" style="--accent:#0754a4" data-name="First Abu Dhabi Bank (FAB)" data-bank-country="uae">
           <div class="bank-head">
             <div class="logo" aria-label="First Abu Dhabi Bank">
               <span class="logo-name">FAB</span>
@@ -432,6 +485,28 @@
         </article>
       </section>
 
+      <section class="accounts" aria-label="Qatar bank account" data-country-panel="qatar" hidden>
+        <article class="bank" id="commercial-bank-qatar" style="--accent:#a31c49" data-name="The Commercial Bank (P.S.Q.C.)" data-bank-country="qatar">
+          <div class="bank-head">
+            <div class="logo" aria-label="The Commercial Bank Qatar">
+              <img class="cbq-logo" src="commercial-bank-qatar.svg" alt="The Commercial Bank Qatar" />
+            </div>
+            <span class="selected">Selected</span>
+          </div>
+          <dl>
+            <div class="field"><div><dt>Account name</dt><dd data-value="YOU BABY STUDIO">YOU BABY STUDIO</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>Account number</dt><dd class="mono" data-value="468017520012001">468017520012001</dd></div><button class="copy" type="button">Copy</button></div>
+            <div class="field"><div><dt>IBAN</dt><dd class="mono" data-value="QA37CBQA000000468017520012001">QA37CBQA000000468017520012001</dd></div><button class="copy" type="button">Copy</button></div>
+          </dl>
+          <div class="reference-help" role="note">
+            <div class="reference-title-row"><p class="reference-label">Reference to enter in your banking app</p><span class="reference-required">Important</span></div>
+            <p class="reference-format">Your Name - What you are paying for</p>
+            <p class="reference-examples">Examples: Sarah - Newborn Session • Omar - Gift Card • Maya - Photo Album</p>
+          </div>
+          <div class="copy-all-wrap"><button class="copy copy-all" type="button">Copy all account details</button></div>
+        </article>
+      </section>
+
       <p class="sr-only" aria-live="polite" id="status"></p>
       <footer>You Baby Studio &bull; Secure bank transfer information</footer>
     </main>
@@ -439,6 +514,12 @@
     <script>
       const banks = [...document.querySelectorAll('.bank')];
       const jumpButtons = [...document.querySelectorAll('[data-bank]')];
+      const countryButtons = [...document.querySelectorAll('[data-country]')];
+      const countryPanels = [...document.querySelectorAll('[data-country-panel]')];
+      const countryTips = [...document.querySelectorAll('[data-country-tip]')];
+      const transferGuide = document.getElementById('transfer-guide');
+      const uaeBankNav = document.getElementById('uae-bank-nav');
+      const stepOneCopy = document.getElementById('step-one-copy');
       const copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></svg>';
       const checkIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m5 12 4 4 10-10"/></svg>';
 
@@ -463,13 +544,35 @@
         window.setTimeout(() => { button.innerHTML = original; }, 2200);
       }
 
+      function selectCountry(country, updateHash) {
+        countryButtons.forEach(button => {
+          const active = button.dataset.country === country;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        transferGuide.hidden = false;
+        uaeBankNav.hidden = country !== 'uae';
+        countryPanels.forEach(panel => { panel.hidden = panel.dataset.countryPanel !== country; });
+        countryTips.forEach(tip => { tip.hidden = tip.dataset.countryTip !== country; });
+        stepOneCopy.textContent = country === 'uae'
+          ? 'When possible, choose the same bank you are sending from, then copy and double-check the account details.'
+          : 'Use the Qatar account below and double-check the details before transferring.';
+        banks.forEach(bank => bank.classList.remove('active'));
+        jumpButtons.forEach(button => button.classList.remove('active'));
+        if (updateHash) history.replaceState(null, '', '#' + country);
+      }
+
       function selectBank(id, scroll) {
+        const selectedBank = banks.find(bank => bank.id === id);
+        if (!selectedBank) return;
+        selectCountry(selectedBank.dataset.bankCountry, false);
         banks.forEach(bank => bank.classList.toggle('active', bank.id === id));
         jumpButtons.forEach(button => button.classList.toggle('active', button.dataset.bank === id));
         history.replaceState(null, '', '#' + id);
         if (scroll) document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
+      countryButtons.forEach(button => button.addEventListener('click', () => selectCountry(button.dataset.country, true)));
       jumpButtons.forEach(button => button.addEventListener('click', () => selectBank(button.dataset.bank, true)));
 
       document.querySelectorAll('.field .copy').forEach(button => {
@@ -493,7 +596,9 @@
       });
 
       const initial = location.hash.slice(1);
-      if (banks.some(bank => bank.id === initial)) {
+      if (initial === 'uae' || initial === 'qatar') {
+        selectCountry(initial, false);
+      } else if (banks.some(bank => bank.id === initial)) {
         selectBank(initial, false);
         window.setTimeout(() => document.getElementById(initial).scrollIntoView({ block: 'center' }), 120);
       }
